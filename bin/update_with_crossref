@@ -1,0 +1,180 @@
+#!/usr/bin/perl -w
+
+use FindBin;
+use lib "$FindBin::Bin/../../../perl_lib";
+
+
+=head1 NAME
+
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+
+=cut
+
+use EPrints;
+use JSON;
+use Data::Dumper;
+
+use strict;
+use warnings;
+
+my $repoid = $ARGV[0];
+
+#### Repo stuff ####
+my $ep = EPrints->new();
+my $repo = $ep->repository( $repoid );
+unless( $repo )
+{
+    die( "could not find repository with id: $repoid" );
+}
+
+my $filename = "funder_ids_log.txt";
+open(my $fh, '>', $filename) or die "Could not open file '$filename' $!";
+
+my $debug = "debug_log.txt";
+open(my $debug_fh, '>', $debug) or die "Could not open file '$debug' $!";
+
+
+my $ds = $repo->dataset( "eprint" );
+my $list;
+
+my $eprintid = $ARGV[1];
+if( defined $eprintid )
+{
+    $list = EPrints::List->new( repository => $repo, dataset => $ds, ids => [$eprintid] );
+}
+else
+{
+    $list = $ds->search;
+}
+
+my %funder_cache = ();
+
+$list->map( sub{
+    my( undef, undef, $eprint ) = @_;
+
+    my $status = $eprint->value( "eprint_status" );
+    return if $status eq "deletion" || $status eq "inbox";
+    return unless $eprint->is_set( "funders_advanced" );
+    
+    my $update = 0;
+    my @new_funders;
+    foreach my $funder ( @{$eprint->value( "funders_advanced" )} )
+    {
+        if( exists $funder->{name} && !exists $funder->{id} )
+        {
+            # get our normalised name
+            my $funder_name = $funder->{name};
+            my $normalised_name = uc( $funder_name );
+            $normalised_name =~ tr/ /+/;
+
+            # first does our funder name exist in our cache?
+            if( exists $funder_cache{$normalised_name} )
+            {
+                my $funder_id = $funder_cache{$normalised_name}; # may return id or 0
+                
+                # only use if a name is returned
+                if( $funder_id )
+                {
+                    print $debug_fh "Cache result: $funder_name....$funder_id\n";
+                    $funder->{id} = $funder_id;
+                    $update = 1;
+                }            
+            }
+            else # we need to do a query
+            {
+                my $result = crossref_query( $repo, $funder_name, $normalised_name );
+                if( $result )
+                {
+                    print $debug_fh "Query result: $funder_name....$result\n";
+                    $funder->{id} = $result;
+                    $funder_cache{$normalised_name} = $result;
+                    $update = 1;
+                }
+                else # no result, store this fact
+                {
+                    $funder_cache{$normalised_name} = 0;
+                }
+                print $debug_fh "Cache updated: $normalised_name....$result\n";
+            }
+        }
+        push @new_funders, $funder; # just add to new list as is...
+    }
+
+    if( $update )
+    {
+        print $fh "----Updating EPrint ID: " . $eprint->id . "----\n";
+        print $fh "Old Funders:\n";
+        print $fh Dumper( \@{$eprint->value( "funders_advanced" )} );
+        print $fh "New Funders:\n";
+        print $fh Dumper( \@new_funders );
+    
+        #$eprint->set_value( "funders_advanced", \@new_funders );
+        #$eprint->commit;
+    }
+});
+
+close $fh;
+close $debug_fh;
+
+sub crossref_query
+{
+    my( $repo, $name, $normalised_name ) = @_;
+
+    # build the request
+    my $url = "https://api.crossref.org/funders";
+    $url .= "?query=$normalised_name";
+    
+    my $ua = LWP::UserAgent->new;
+
+    # User-Agent header for politeness
+    my $ua_header = $repo->phrase( "archive_name" ) . " ( " . $repo->config( "host" ) . "; mailto:" . $repo->config( "adminemail" ) . ")";
+
+    my $headers = HTTP::Headers->new(
+        'Accept' => 'application/json',
+        'User-Agent' => $ua_header,
+    );
+
+    my $req =  HTTP::Request->new(
+        GET => $url,
+        $headers,
+    );
+    
+    print $debug_fh "Running query for $normalised_name\n";
+
+    my $res = $ua->request( $req );
+
+    if( $res->is_success )
+    {
+        # get rate limit interval - we could be quicker than this, but we're not in a massive rush
+        my $sleep = substr $res->header('X-Rate-Limit-Interval'), 0, -1;
+        print $debug_fh "now sleep for $sleep\n";
+        sleep( $sleep );
+            
+        my $json = JSON->new->utf8;
+        my $content = $json->decode( $res->content );
+
+        # nothing if zero results
+        return 0 if( $content->{message}->{'total-results'} == 0 );
+
+        # uri if there is one result
+        return $content->{message}->{items}->[0]->{uri} if ( $content->{message}->{'total-results'} == 1 );
+
+        # if one matches the name exactly, use it...
+        foreach my $funder ( @{$content->{message}->{items}} )
+        {
+            if( $name eq $funder->{name} )
+            {
+                return $funder->{uri};
+            } 
+        }
+        return 0;
+    }
+    else # fail :(
+    {
+        return 0;  
+    }
+};

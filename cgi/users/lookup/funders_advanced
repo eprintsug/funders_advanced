@@ -1,0 +1,105 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+funders_advanced - finds funders from the cross ref api
+
+=cut
+
+use EPrints;
+use Data::Dumper;
+
+use strict;
+use warnings;
+
+my $repo = EPrints->new->current_repository;
+
+my $db = $repo->get_database;
+
+# name from the workflow
+my $name = $repo->param( "_name" );
+
+# only start searching once we've got something to work with
+if( length $name < 3 )
+{
+    exit;
+}
+
+
+# build the request
+my $url = "https://api.crossref.org/funders";
+
+# add the name to the query
+$name =~ tr/ /+/;
+$url .= "?query=$name";
+
+my $ua = LWP::UserAgent->new;
+
+# User-Agent header for politeness
+my $ua_header = $repo->phrase( "archive_name" ) . " ( " . $repo->config( "host" ) . "; mailto:" . $repo->config( "adminemail" ) . ")";
+
+my $headers = HTTP::Headers->new(
+    'Accept' => 'application/json',
+    'User-Agent' => $ua_header,
+);
+
+my $req =  HTTP::Request->new( 
+    GET => $url,
+    $headers, 
+);
+
+my $res = $ua->request( $req );
+
+if( $res->is_success )
+{
+    my $json = JSON->new->utf8;
+    my $content = $json->decode( $res->content );
+
+    my @rows;
+
+    if( $content->{message}->{'total-results'} == 0 )
+    {
+        my $item = {};
+        push @rows, $item;
+
+        my $frag = $repo->make_doc_fragment;
+        $frag->appendChild( $repo->html_phrase( 'funders_advanced:no_results' ) );
+        $item->{xhtml} = $frag;
+        $item->{values} = [
+            "for:value:relative:_name" => "",
+            "for:value:relative:_id" => "",
+        ];
+    }
+    else
+    {
+        foreach my $funder ( @{$content->{message}->{items}} )
+        {
+            my $item = {};
+            push @rows, $item;
+
+            my $frag = $repo->make_doc_fragment;
+            $frag->appendChild( $repo->make_text( $funder->{name} ) );
+          
+            $item->{xhtml} = $frag;
+            $item->{values} = [
+                "for:value:relative:_name" => $funder->{name},
+                "for:value:relative:_id" => $funder->{uri},
+            ];
+        }
+    }
+
+    my $ul = EPrints::Extras::render_lookup_list( $repo, \@rows );
+
+    $repo->send_http_header( content_type => "text/xml; charset=UTF-8" );
+
+    binmode(STDOUT,":utf8");
+    print <<END;
+<?xml version="1.0" encoding="UTF-8" ?>
+
+END
+    print EPrints::XML::to_string( $ul, "utf-8", 1 );
+
+    EPrints::XML::dispose( $ul );
+
+    $repo->terminate;
+};
