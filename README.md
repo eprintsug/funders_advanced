@@ -27,6 +27,6 @@ To autopopulate existing funder names with their associated IDs, a script is inc
 
 ````
 bin/update_with_crossref <repoid>
-```
+````
 
 This will lookup each existing funder name against the Crossref API and if there is an unambiguous result (i.e. the funder name matches a record held in Crossref exactly), the ID will be added. To help with rate limiting on the Crossref API, the script will sleep after each query based on the X-Rate-Limit-Interval response. Results are also cached by the script to prevent repeated lookups.
