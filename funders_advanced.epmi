@@ -17,9 +17,9 @@
           <datasetid>document</datasetid>
           <filename>cfg.d/zzz_funders_rioxx.pl</filename>
           <mime_type>text/plain</mime_type>
-          <hash>5f48bf44eb803aa30f16c8e80796578c</hash>
+          <hash>f8b38e6ee4ee97b668036902d38cf9a8</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1102</filesize>
+          <filesize>2683</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -41,22 +41,46 @@
           <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cgi/users/lookup/funders_advanced</filename>
           <mime_type>text/x-perl</mime_type>
-          <hash>17afe5f99b39154a011ddc58eaeb2f05</hash>
+          <hash>b09bf2511e114cffe812d1798acb5edc</hash>
           <hash_type>MD5</hash_type>
-          <filesize>2317</filesize>
+          <filesize>1949</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
+          <filename>epm/funders_advanced/cgi/users/lookup/funders_advanced_rioxx</filename>
+          <mime_type>text/x-perl</mime_type>
+          <hash>f0189f418c2df07bf8bae8d6b4407b43</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>6778</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
           <filename>lang/en/phrases/funders_advanced.xml</filename>
           <mime_type>application/xml</mime_type>
-          <hash>a27f8ea2003922fd4860edcaf761e45d</hash>
+          <hash>b6e6731f4c37d7aafda27acba1604f43</hash>
           <hash_type>MD5</hash_type>
-          <filesize>774</filesize>
+          <filesize>1102</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
+          <filename>plugins/EPrints/FundersAdvanced/Utils.pm</filename>
+          <mime_type>text/plain</mime_type>
+          <hash>9ce4b4b464f4a9a826c83cf4b9ed3a16</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>1006</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
+          <filename>static/style/auto/funders_advanced.css</filename>
+          <mime_type>text/plain</mime_type>
+          <hash>9e4bff5f84acf7147e9f36ec74632810</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>83</filesize>
         </file>
       </files>
-      <mime_type>application/xml</mime_type>
-      <format>text/xml</format>
-      <main>lang/en/phrases/funders_advanced.xml</main>
+      <mime_type>text/plain</mime_type>
+      <format>other</format>
+      <main>static/style/auto/funders_advanced.css</main>
       <content>install</content>
     </document>
   </documents>

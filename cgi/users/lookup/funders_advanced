@@ -7,6 +7,7 @@ funders_advanced - finds funders from the cross ref api
 =cut
 
 use EPrints;
+use EPrints::FundersAdvanced::Utils;
 use Data::Dumper;
 
 use strict;
@@ -25,39 +26,13 @@ if( length $name < 3 )
     exit;
 }
 
+my $response = EPrints::FundersAdvanced::Utils::crossref_query( $repo, $name );
 
-# build the request
-my $url = "https://api.crossref.org/funders";
-
-# add the name to the query
-$name =~ tr/ /+/;
-$url .= "?query=$name";
-
-my $ua = LWP::UserAgent->new;
-
-# User-Agent header for politeness
-my $ua_header = $repo->phrase( "archive_name" ) . " ( " . $repo->config( "host" ) . "; mailto:" . $repo->config( "adminemail" ) . ")";
-
-my $headers = HTTP::Headers->new(
-    'Accept' => 'application/json',
-    'User-Agent' => $ua_header,
-);
-
-my $req =  HTTP::Request->new( 
-    GET => $url,
-    $headers, 
-);
-
-my $res = $ua->request( $req );
-
-if( $res->is_success )
+if( $response )
 {
-    my $json = JSON->new->utf8;
-    my $content = $json->decode( $res->content );
-
     my @rows;
 
-    if( $content->{message}->{'total-results'} == 0 )
+    if( $response->{message}->{'total-results'} == 0 )
     {
         my $item = {};
         push @rows, $item;
@@ -72,14 +47,17 @@ if( $res->is_success )
     }
     else
     {
-        foreach my $funder ( @{$content->{message}->{items}} )
+        foreach my $funder ( @{$response->{message}->{items}} )
         {
             my $item = {};
             push @rows, $item;
 
             my $frag = $repo->make_doc_fragment;
-            $frag->appendChild( $repo->make_text( $funder->{name} ) );
-          
+            $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
+                name => $repo->make_text( $funder->{name} ),
+                id => $repo->make_text( $funder->{uri} ) )
+            );
+      
             $item->{xhtml} = $frag;
             $item->{values} = [
                 "for:value:relative:_name" => $funder->{name},
