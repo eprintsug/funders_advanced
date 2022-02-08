@@ -24,20 +24,22 @@ my $limit = 20;
 if ( $string_frag eq $funder_name ) 
 {
 	$rows = lookup_funder_names( $repo, $lookup_file, $funder_name, $limit );
+    if( length $funder_name > $repo->get_conf( "funders_advanced", "crossref_name_threshold" ) )
+    {
+        push @$rows, @{lookup_crossref_names( $repo, $funder_name )};
+    }
 }
 elsif ( $string_frag eq $funder_id )
 {
 	$rows = lookup_funder_ids( $repo, $lookup_file, $funder_id, $limit );
+    if( length $funder_id > $repo->get_conf( "funders_advanced", "crossref_id_threshold" ) )
+    {
+        push @$rows, @{lookup_crossref_id( $repo, $funder_id )};
+    }
 }
 elsif ( $string_frag eq $project )
 {
 	$rows = lookup_project( $repo, $project, $limit );
-}
-
-# and if we're looking at a funder name, do a lookup against crossref too...
-if ( $string_frag eq $funder_name && length $funder_name > 2  )
-{
-    push @$rows, @{lookup_crossref_names( $repo, $funder_name )};
 }
 
 my $ul = EPrints::Extras::render_lookup_list( $repo, $rows );
@@ -200,14 +202,12 @@ sub read_lookup_file
 
 sub lookup_crossref_names
 {
-	my ( $repo, $name ) = @_;
+    my ( $repo, $name ) = @_;
 
     my $response = EPrints::FundersAdvanced::Utils::crossref_query( $repo, $name );
-
+    my @rows;
     if( $response )
     {
-        my @rows;
-
         if( $response->{message}->{'total-results'} == 0 )
         {
             my $item = {};
@@ -215,8 +215,8 @@ sub lookup_crossref_names
 
             my $frag = $repo->make_doc_fragment;
             $frag->appendChild( $repo->html_phrase( 'funders_advanced:no_results' ) );
-           $item->{xhtml} = $frag;
-           $item->{values} = [
+            $item->{xhtml} = $frag;
+            $item->{values} = [
                "for:value:relative:_funder_name" => "",
                "for:value:relative:_funder_id" => "",
            ];
@@ -229,9 +229,9 @@ sub lookup_crossref_names
                 push @rows, $item;
 
                 my $frag = $repo->make_doc_fragment;
-	    		$frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced_rioxx:funder',
-            		name=> $repo->make_text( $funder->{name} ), 
-			    	id => $repo->make_text( $funder->{uri} ) ) 
+                $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced_rioxx:funder',
+                    name=> $repo->make_text( $funder->{name} ), 
+                    id => $repo->make_text( $funder->{uri} ) ) 
                 );
 
                 $item->{xhtml} = $frag;
@@ -241,7 +241,32 @@ sub lookup_crossref_names
                 ];
             }
         }
-        return \@rows;
     }
+    return \@rows;
 }
 
+sub lookup_crossref_id
+{
+    my ( $repo, $id ) = @_;
+    my @rows;
+    my $response = EPrints::FundersAdvanced::Utils::crossref_id( $repo, $id );
+    if( $response )
+    {
+        my $funder = $response->{message};
+       my $item = {};
+        push @rows, $item;
+
+        my $frag = $repo->make_doc_fragment;
+        $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
+            name => $repo->make_text( $funder->{name} ),
+            id => $repo->make_text( $funder->{uri} ) )
+        );
+
+        $item->{xhtml} = $frag;
+        $item->{values} = [
+            "for:value:relative:_funder_name" => $funder->{name},
+            "for:value:relative:_funder_id" => $funder->{uri},
+        ];
+    }
+    return \@rows;
+}

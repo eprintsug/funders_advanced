@@ -17,67 +17,108 @@ my $repo = EPrints->new->current_repository;
 
 my $db = $repo->get_database;
 
-# name from the workflow
-my $name = $repo->param( "_name" );
+my $string_frag = lc $repo->param( "q" );
 
-# only start searching once we've got something to work with
-if( length $name < 3 )
+# name from the workflow
+my $name = lc $repo->param( "_name" );
+
+# id from the workflow
+my $id = lc $repo->param( "_id" );
+
+my $rows = [];
+
+# if we might have a complete DOI, let's do an id check first
+if( $string_frag eq $id && length $id > $repo->get_conf( "funders_advanced", "crossref_id_threshold" ) )
 {
-    exit;
+    $rows = lookup_id( $repo, $id )
+}
+elsif( $string_frag eq $name && length $name > $repo->get_conf( "funders_advanced", "crossref_name_threshold" ) )
+{
+    $rows = lookup_name( $repo, $name )
 }
 
-my $response = EPrints::FundersAdvanced::Utils::crossref_query( $repo, $name );
+my $ul = EPrints::Extras::render_lookup_list( $repo, $rows );
+$repo->send_http_header( content_type => "text/xml; charset=UTF-8" );
+binmode(STDOUT,":utf8");
+print <<END;
+<?xml version="1.0" encoding="UTF-8" ?>
+END
+print EPrints::XML::to_string( $ul, "utf-8", 1 );
+EPrints::XML::dispose( $ul );
+$repo->terminate;
 
-if( $response )
+sub lookup_id
 {
-    my @rows;
+    my( $repo, $id ) = @_;
 
-    if( $response->{message}->{'total-results'} == 0 )
+    my $rows = [];
+
+    my $response = EPrints::FundersAdvanced::Utils::crossref_id( $repo, $id );
+    if( $response )
     {
-        my $item = {};
-        push @rows, $item;
+        my $funder = $response->{message};
 
+        my $item = {};
+        push @$rows, $item;
+        
         my $frag = $repo->make_doc_fragment;
-        $frag->appendChild( $repo->html_phrase( 'funders_advanced:no_results' ) );
+        $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
+            name => $repo->make_text( $funder->{name} ),
+            id => $repo->make_text( $funder->{uri} ) )
+        );
+      
         $item->{xhtml} = $frag;
         $item->{values} = [
-            "for:value:relative:_name" => "",
-            "for:value:relative:_id" => "",
-        ];
+            "for:value:relative:_name" => $funder->{name},
+            "for:value:relative:_id" => $funder->{uri},
+        ];       
     }
-    else
+    return $rows;
+}
+
+sub lookup_name
+{
+    my( $repo, $name ) = @_;
+
+    my $rows = [];
+
+    my $response = EPrints::FundersAdvanced::Utils::crossref_query( $repo, $name );
+
+    if( $response )
     {
-        foreach my $funder ( @{$response->{message}->{items}} )
+        if( $response->{message}->{'total-results'} == 0 )
         {
             my $item = {};
-            push @rows, $item;
+            push @$rows, $item;
 
             my $frag = $repo->make_doc_fragment;
-            $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
-                name => $repo->make_text( $funder->{name} ),
-                id => $repo->make_text( $funder->{uri} ) )
-            );
-      
+            $frag->appendChild( $repo->html_phrase( 'funders_advanced:no_results' ) );
             $item->{xhtml} = $frag;
             $item->{values} = [
-                "for:value:relative:_name" => $funder->{name},
-                "for:value:relative:_id" => $funder->{uri},
+                "for:value:relative:_name" => "",
+                "for:value:relative:_id" => "",
             ];
         }
+        else
+        {
+            foreach my $funder ( @{$response->{message}->{items}} )
+            {
+                my $item = {};
+                push @$rows, $item;
+
+               my $frag = $repo->make_doc_fragment;
+                $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
+                    name => $repo->make_text( $funder->{name} ),
+                    id => $repo->make_text( $funder->{uri} ) )
+                );
+      
+                $item->{xhtml} = $frag;
+                $item->{values} = [
+                    "for:value:relative:_name" => $funder->{name},
+                    "for:value:relative:_id" => $funder->{uri},
+                ];
+            }
+        }
     }
-
-    my $ul = EPrints::Extras::render_lookup_list( $repo, \@rows );
-
-    $repo->send_http_header( content_type => "text/xml; charset=UTF-8" );
-
-    binmode(STDOUT,":utf8");
-    print <<END;
-<?xml version="1.0" encoding="UTF-8" ?>
-
-END
-    print EPrints::XML::to_string( $ul, "utf-8", 1 );
-
-    EPrints::XML::dispose( $ul );
-
-    $repo->terminate;
+    return $rows;
 };
