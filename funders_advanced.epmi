@@ -65,9 +65,9 @@
           <datasetid>document</datasetid>
           <filename>lang/en/phrases/funders_advanced.xml</filename>
           <mime_type>application/xml</mime_type>
-          <hash>2429c25d55cbbeb6da35f890ff2f7a70</hash>
+          <hash>05298099ae9254c15c5c08d94f3035f2</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1725</filesize>
+          <filesize>1839</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -81,9 +81,9 @@
           <datasetid>document</datasetid>
           <filename>plugins/EPrints/Plugin/Screen/Report/FundersMissingIDs.pm</filename>
           <mime_type>text/plain</mime_type>
-          <hash>211294ab2a67936b121c4b9428262593</hash>
+          <hash>0954b5812036f618103e3d8afd29a03f</hash>
           <hash_type>MD5</hash_type>
-          <filesize>4145</filesize>
+          <filesize>4129</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>

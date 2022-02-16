@@ -96,7 +96,7 @@ sub validate_dataobj
     {
         if( exists $funder->{name} && !exists $funder->{id} )
         {
-           push @problems, $repo->phrase( "funders_advanced_missing_id", name => $repo->xml->create_text_node( $funder->{name} ) );           
+           push @problems, $repo->phrase( "funders_advanced_missing_id", name => $funder->{name} );
         }
     }
 
@@ -119,7 +119,7 @@ sub validate_dataobj
         $link->appendChild( $r_name );
         $frag->appendChild( $self->html_phrase( "edit_funders_link", link => $link ) );
 
-        push @problems, $frag;
+        push @problems, EPrints::XML::to_string( $frag );
     }
 
     return @problems;

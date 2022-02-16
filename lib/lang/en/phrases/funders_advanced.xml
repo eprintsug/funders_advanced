@@ -22,6 +22,7 @@
 <epp:phrase id="funders_missing_ids:sort:bytitle">Title</epp:phrase>
 <epp:phrase id="funders_missing_ids:sort:bydivision">Division</epp:phrase>
 
+<epp:phrase id="Plugin/Screen/Report/FundersMissingIDs:edit_field_link">Edit <epc:pin name="field"/></epp:phrase>
 <epp:phrase id="Plugin/Screen/Report/FundersMissingIDs:edit_funders_link">Edit <epc:pin name="link"/></epp:phrase>
 
 </epp:phrases>
