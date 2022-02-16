@@ -14,4 +14,14 @@
 
 <epp:phrase id="cgi/lookup/funders_advanced_rioxx:funder"><epc:pin name="name"/><span class="crossref_lookup">Crossref</span><br/>(<epc:pin name="id"/>)</epp:phrase>
 
+<!-- Missing IDs report -->
+<epp:phrase id="Plugin/Screen/Report/FundersMissingIDs:title">Funders missing IDs</epp:phrase>
+<epp:phrase id="funders_advanced_missing_id">Funder missing ID: <epc:pin name="name" /></epp:phrase>
+<epp:phrase id="funders_missing_ids:sort:byyear">Year</epp:phrase>
+<epp:phrase id="funders_missing_ids:sort:byname">Creators</epp:phrase>
+<epp:phrase id="funders_missing_ids:sort:bytitle">Title</epp:phrase>
+<epp:phrase id="funders_missing_ids:sort:bydivision">Division</epp:phrase>
+
+<epp:phrase id="Plugin/Screen/Report/FundersMissingIDs:edit_funders_link">Edit <epc:pin name="link"/></epp:phrase>
+
 </epp:phrases>

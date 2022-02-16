@@ -39,6 +39,14 @@
         </file>
         <file>
           <datasetid>document</datasetid>
+          <filename>epm/funders_advanced/cfg/cfg.d/zz_funders_advanced.pl</filename>
+          <mime_type>text/plain</mime_type>
+          <hash>c0d2b5dafe7f4a0d10d3b270a57777ed</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>570</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cgi/users/lookup/funders_advanced</filename>
           <mime_type>text/x-perl</mime_type>
           <hash>d0963d2f5695a7a58d4ee24e412df2b3</hash>
@@ -57,9 +65,9 @@
           <datasetid>document</datasetid>
           <filename>lang/en/phrases/funders_advanced.xml</filename>
           <mime_type>application/xml</mime_type>
-          <hash>b6e6731f4c37d7aafda27acba1604f43</hash>
+          <hash>2429c25d55cbbeb6da35f890ff2f7a70</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1102</filesize>
+          <filesize>1725</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -68,6 +76,14 @@
           <hash>c795548c66d40f071bed8dbab75589c1</hash>
           <hash_type>MD5</hash_type>
           <filesize>1783</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
+          <filename>plugins/EPrints/Plugin/Screen/Report/FundersMissingIDs.pm</filename>
+          <mime_type>text/plain</mime_type>
+          <hash>211294ab2a67936b121c4b9428262593</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>4145</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -84,7 +100,7 @@
       <content>install</content>
     </document>
   </documents>
-  <version>1.1</version>
+  <version>1.2</version>
   <creators>
     <item>
       <name>
