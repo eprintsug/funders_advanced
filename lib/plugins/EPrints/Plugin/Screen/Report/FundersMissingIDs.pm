@@ -15,7 +15,7 @@ sub new
     $self->{report} = 'funders_missing_ids';
     $self->{searchdatasetid} = 'archive';
     $self->{show_compliance} = 0;
-
+    $self->{appears} = [];
     $self->{labels} = {
         outputs => "eprints"
     };
@@ -33,14 +33,12 @@ sub items
     my( $self ) = @_;
 
     my $list = $self->SUPER::items();
-
     if( defined $list )
     {
         my @ids = ();
 
         $list->map(sub{
             my( $session, $dataset, $eprint ) = @_;
-
             my @problems = $self->validate_dataobj( $eprint );
 
             if( ( scalar( @problems ) > 0 ) && ( $eprint->is_set( "funders_advanced" ) ) )
@@ -91,10 +89,9 @@ sub validate_dataobj
     my $repo = $self->{repository};
 
     my @problems;
-
     foreach my $funder ( @{$eprint->value( "funders_advanced" )} )
     {
-        if( exists $funder->{name} && !exists $funder->{id} )
+        if( exists $funder->{name} && ( !exists $funder->{id} || !defined $funder->{id} ) )
         {
            push @problems, $repo->phrase( "funders_advanced_missing_id", name => $funder->{name} );
         }
