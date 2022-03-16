@@ -137,14 +137,14 @@ sub _get_workflow_stage
     
     # get workflow id
     my $workflow_id = "default";
-    if( defined $repo->config( "type_to_workflow" ) )
-    {
-        my $type = $eprint->value( "type" );
-        if( exists $repo->config( "type_to_workflow" )->{$type} )
-        {
-            $workflow_id = $repo->config( "type_to_workflow" )->{$type};
-        }
-    }
+    my $processor = EPrints::ScreenProcessor->new(
+        session => $repo,
+        eprint => $eprint,
+        eprintid => $eprint->get_id,
+    );
+
+    my $edit_screen = $repo->plugin( "Screen::EPrint::Edit", processor=>$processor );
+    $workflow_id = $edit_screen->workflow_id;
 
     my $workflow = EPrints::Workflow->new(
         $self->{session},

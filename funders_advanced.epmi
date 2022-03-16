@@ -41,9 +41,9 @@
           <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cfg/cfg.d/zz_funders_advanced.pl</filename>
           <mime_type>text/plain</mime_type>
-          <hash>37e0d21c9848bcfd849206b5485016cc</hash>
+          <hash>5f2ff29d8c8a36ceedd591fc6527d1b0</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1772</filesize>
+          <filesize>1610</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -81,9 +81,9 @@
           <datasetid>document</datasetid>
           <filename>plugins/EPrints/Plugin/Screen/Report/FundersMissingIDs.pm</filename>
           <mime_type>text/plain</mime_type>
-          <hash>8467e40e051f5d5311462b3f5d28016f</hash>
+          <hash>c5a886320fdd4616cf26c37af029d3cc</hash>
           <hash_type>MD5</hash_type>
-          <filesize>4525</filesize>
+          <filesize>4536</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>

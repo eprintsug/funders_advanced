@@ -4,12 +4,6 @@ $c->{plugins}{"Screen::Report::FundersMissingIDs"}{params}{custom} = 1;
 $c->{funders_missing_ids}->{export_plugins} = $c->{eprint_report}->{export_plugins};
 $c->{funders_missing_ids}->{sortfields} = $c->{eprint_report}->{sortfields};
 
-# Define the workflow IDs for different eprint types, e.g.
-#$c->{type_to_workflow} = {
-#    data_collection => "recollect",
-#    collection => "collection",
-#};
-
 $c->{funders_missing_ids}->{exportfields} = {
     funders_missing_ids => [
         @{$c->{eprint_report}->{exportfields}->{eprint_report_core}},
