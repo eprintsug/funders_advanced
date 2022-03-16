@@ -41,9 +41,9 @@
           <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cfg/cfg.d/zz_funders_advanced.pl</filename>
           <mime_type>text/plain</mime_type>
-          <hash>5f2ff29d8c8a36ceedd591fc6527d1b0</hash>
+          <hash>37e0d21c9848bcfd849206b5485016cc</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1610</filesize>
+          <filesize>1772</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -81,9 +81,9 @@
           <datasetid>document</datasetid>
           <filename>plugins/EPrints/Plugin/Screen/Report/FundersMissingIDs.pm</filename>
           <mime_type>text/plain</mime_type>
-          <hash>21e519e7eb2f0fe88f04618c70c81b2b</hash>
+          <hash>8467e40e051f5d5311462b3f5d28016f</hash>
           <hash_type>MD5</hash_type>
-          <filesize>4182</filesize>
+          <filesize>4525</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -95,12 +95,12 @@
         </file>
       </files>
       <mime_type>text/plain</mime_type>
-      <format>other</format>
+      <format>text</format>
       <main>static/style/auto/funders_advanced.css</main>
       <content>install</content>
     </document>
   </documents>
-  <version>1.2</version>
+  <version>1.3</version>
   <creators>
     <item>
       <name>

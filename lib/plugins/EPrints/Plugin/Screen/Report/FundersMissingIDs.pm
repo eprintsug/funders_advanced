@@ -106,7 +106,7 @@ sub validate_dataobj
         my $field = $dataset->field( "funders_advanced" );
         my $r_name = $field->render_name( $eprint->{session} );
         my $name = $field->get_name;
-        my $stage = $self->_get_workflow_stage( $eprint, $name );
+        my $stage = $self->_get_workflow_stage( $repo, $eprint, $name );
 
         my $url = "?eprintid=".$eprint->get_id."&screen=EPrint::Edit&stage=$stage#$name";
         my $link = $eprint->{session}->render_link( $url );
@@ -124,7 +124,7 @@ sub validate_dataobj
 
 sub _get_workflow_stage
 {
-    my( $self, $eprint, $name ) = @_;
+    my( $self, $repo, $eprint, $name ) = @_;
 
     my $staff = $self->_allow_edit_eprint;
 
@@ -135,9 +135,20 @@ sub _get_workflow_stage
         STAFF_ONLY => [$staff ? "TRUE" : "FALSE","BOOLEAN"],
     );
     
+    # get workflow id
+    my $workflow_id = "default";
+    if( defined $repo->config( "type_to_workflow" ) )
+    {
+        my $type = $eprint->value( "type" );
+        if( exists $repo->config( "type_to_workflow" )->{$type} )
+        {
+            $workflow_id = $repo->config( "type_to_workflow" )->{$type};
+        }
+    }
+
     my $workflow = EPrints::Workflow->new(
         $self->{session},
-        "default",
+        $workflow_id,
         %opts
     );
 
