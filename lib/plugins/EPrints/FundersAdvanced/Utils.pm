@@ -15,8 +15,11 @@ sub crossref_query
 
     my $ua = LWP::UserAgent->new;
 
+    my $archive_name = $repo->phrase( "archive_name" );
+    $archive_name = $repo->config( "funders_advanced", "archive_name" ) if defined $repo->config( "funders_advanced", "archive_name" );
+
     # User-Agent header for politeness
-    my $ua_header = $repo->phrase( "archive_name" ) . " ( " . $repo->config( "host" ) . "; mailto:" . $repo->config( "adminemail" ) . ")";
+    my $ua_header = $archive_name. " ( " . $repo->config( "host" ) . "; mailto:" . $repo->config( "adminemail" ) . ")";
 
     my $headers = HTTP::Headers->new(
         'Accept' => 'application/json',
