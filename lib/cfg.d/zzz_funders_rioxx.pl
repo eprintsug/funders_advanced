@@ -14,6 +14,9 @@ for( @{$c->{fields}->{eprint}} )
 $c->{rioxx2_value_funders_advanced} = sub {
 	my ( $eprint ) = @_;
 
+    # trigger is global - check that current repository actually has funders_advanced field
+    return unless $eprint->dataset->has_field( "funders_advanced" );
+
     return unless $eprint->is_set( "funders_advanced" ) && $eprint->is_set( "projects" );
 
     # attempt to give every project a funder (and vice versa)

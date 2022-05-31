@@ -17,9 +17,9 @@
           <datasetid>document</datasetid>
           <filename>cfg.d/zzz_funders_rioxx.pl</filename>
           <mime_type>text/plain</mime_type>
-          <hash>f8b38e6ee4ee97b668036902d38cf9a8</hash>
+          <hash>fe501f864c587fd06d0f88bdc7d7e02f</hash>
           <hash_type>MD5</hash_type>
-          <filesize>2683</filesize>
+          <filesize>2845</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -100,7 +100,7 @@
       <content>install</content>
     </document>
   </documents>
-  <version>1.3</version>
+  <version>1.3.1</version>
   <creators>
     <item>
       <name>
