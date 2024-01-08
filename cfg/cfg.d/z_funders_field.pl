@@ -2,8 +2,8 @@
 #$c->{funders_advanced}->{archive_name} = "Repository Name Here";
 
 # define the number of characters that need to be input before we go querying the crossref api
-$c->{funders_advanced}->{crossref_name_threshold} = 2;
-$c->{funders_advanced}->{crossref_id_threshold} = 8;
+$c->{funders_advanced}->{ror_name_threshold} = 2;
+$c->{funders_advanced}->{ror_id_threshold} = 8;
 
 $c->add_dataset_field( "eprint",
 {

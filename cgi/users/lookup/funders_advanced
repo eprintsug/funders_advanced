@@ -28,11 +28,11 @@ my $id = lc $repo->param( "_id" );
 my $rows = [];
 
 # if we might have a complete DOI, let's do an id check first
-if( $string_frag eq $id && length $id > $repo->get_conf( "funders_advanced", "crossref_id_threshold" ) )
+if( $string_frag eq $id && length $id > $repo->get_conf( "funders_advanced", "ror_id_threshold" ) )
 {
     $rows = lookup_id( $repo, $id )
 }
-elsif( $string_frag eq $name && length $name > $repo->get_conf( "funders_advanced", "crossref_name_threshold" ) )
+elsif( $string_frag eq $name && length $name > $repo->get_conf( "funders_advanced", "ror_name_threshold" ) )
 {
     $rows = lookup_name( $repo, $name )
 }
@@ -53,24 +53,22 @@ sub lookup_id
 
     my $rows = [];
 
-    my $response = EPrints::FundersAdvanced::Utils::crossref_id( $repo, $id );
-    if( $response )
+    my $funder = EPrints::FundersAdvanced::Utils::ror_id( $repo, $id );
+    if( $funder )
     {
-        my $funder = $response->{message};
-
         my $item = {};
         push @$rows, $item;
         
         my $frag = $repo->make_doc_fragment;
         $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
             name => $repo->make_text( $funder->{name} ),
-            id => $repo->make_text( $funder->{uri} ) )
+            id => $repo->make_text( $funder->{id} ) )
         );
-      
+          
         $item->{xhtml} = $frag;
         $item->{values} = [
             "for:value:relative:_name" => $funder->{name},
-            "for:value:relative:_id" => $funder->{uri},
+            "for:value:relative:_id" => $funder->{id},
         ];       
     }
     return $rows;

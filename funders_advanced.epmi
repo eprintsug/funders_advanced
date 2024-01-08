@@ -23,6 +23,14 @@
         </file>
         <file>
           <datasetid>document</datasetid>
+          <filename>epm/funders_advanced/bin/dois_to_rors</filename>
+          <mime_type>text/x-perl</mime_type>
+          <hash>97ccdcd6e7896c2f75a97bc091d27991</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>4194</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
           <filename>epm/funders_advanced/bin/update_with_crossref</filename>
           <mime_type>text/x-perl</mime_type>
           <hash>5872706175e7885f36e54ab453c252e1</hash>
@@ -31,11 +39,19 @@
         </file>
         <file>
           <datasetid>document</datasetid>
+          <filename>epm/funders_advanced/bin/update_with_ror</filename>
+          <mime_type>text/x-perl</mime_type>
+          <hash>5ed338cec39a3fb4d52ac6cbd7a02bd7</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>5842</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cfg/cfg.d/z_funders_field.pl</filename>
           <mime_type>text/plain</mime_type>
-          <hash>db9a805d66df7e35f078324e5e8e3a08</hash>
+          <hash>6c2293653fa29dc80ce87ed14af48434</hash>
           <hash_type>MD5</hash_type>
-          <filesize>667</filesize>
+          <filesize>657</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -49,33 +65,33 @@
           <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cgi/users/lookup/funders_advanced</filename>
           <mime_type>text/x-perl</mime_type>
-          <hash>d0963d2f5695a7a58d4ee24e412df2b3</hash>
+          <hash>a672bdd258729d0a4c9fbbd4b5cbe419</hash>
           <hash_type>MD5</hash_type>
-          <filesize>3267</filesize>
+          <filesize>3253</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
           <filename>epm/funders_advanced/cgi/users/lookup/funders_advanced_rioxx</filename>
           <mime_type>text/x-perl</mime_type>
-          <hash>2245f457907a7483f6110df4c0449e50</hash>
+          <hash>b08df96d17ca1597267cf873a736a5fa</hash>
           <hash_type>MD5</hash_type>
-          <filesize>7684</filesize>
+          <filesize>7657</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
           <filename>lang/en/phrases/funders_advanced.xml</filename>
           <mime_type>application/xml</mime_type>
-          <hash>6ff2a39e861caa76dcb104dbb27fa220</hash>
+          <hash>ff2fdf480103945da52eef77ef4ddd41</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1904</filesize>
+          <filesize>1976</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
           <filename>plugins/EPrints/FundersAdvanced/Utils.pm</filename>
           <mime_type>text/plain</mime_type>
-          <hash>cd5866b9b10181942ae8d83867b9af40</hash>
+          <hash>c4f2b3a820cf023e1bc43755607ee50b</hash>
           <hash_type>MD5</hash_type>
-          <filesize>1957</filesize>
+          <filesize>3873</filesize>
         </file>
         <file>
           <datasetid>document</datasetid>
@@ -87,11 +103,19 @@
         </file>
         <file>
           <datasetid>document</datasetid>
+          <filename>static/images/ror-icon-rgb-transparent.svg</filename>
+          <mime_type>image/svg+xml</mime_type>
+          <hash>7761e55521e5c448ed0cf3b6f624fb8b</hash>
+          <hash_type>MD5</hash_type>
+          <filesize>3569</filesize>
+        </file>
+        <file>
+          <datasetid>document</datasetid>
           <filename>static/style/auto/funders_advanced.css</filename>
           <mime_type>text/plain</mime_type>
-          <hash>9e4bff5f84acf7147e9f36ec74632810</hash>
+          <hash>7cec9240072f3eb84fb30dc6ac237d30</hash>
           <hash_type>MD5</hash_type>
-          <filesize>83</filesize>
+          <filesize>116</filesize>
         </file>
       </files>
       <mime_type>text/plain</mime_type>
@@ -100,7 +124,7 @@
       <content>install</content>
     </document>
   </documents>
-  <version>1.3.2</version>
+  <version>1.4</version>
   <creators>
     <item>
       <name>
@@ -109,8 +133,14 @@
       </name>
       <id>will.fyson@cosector.com</id>
     </item>
+    <item>
+      <name>
+        <family>Dumbill</family>
+        <given>Eleanor</given>
+      </name>
+    </item>
   </creators>
   <title>Funders Advanced</title>
-  <description>A new and enhanced funders field, with CrossRef lookup!</description>
+  <description>A new and enhanced funders field, with ROR lookup!</description>
   <home_page>https://github.com/eprintsug/funders_advanced</home_page>
 </epm>
