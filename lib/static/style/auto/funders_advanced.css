@@ -1,5 +1,9 @@
-.crossref_lookup{
+.ror_lookup{
     margin-left: 3px;
     font-size: 10px;
     color: #ef3340;
+}
+
+.ror_lookup img{
+    height: 16px;
 }

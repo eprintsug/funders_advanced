@@ -82,11 +82,14 @@ sub lookup_name
 
     my $rows = [];
 
-    my $response = EPrints::FundersAdvanced::Utils::crossref_query( $repo, $name );
+    # ROR uses wildcards, so let's add a * on the end
+    $name .= "*";
+
+    my $response = EPrints::FundersAdvanced::Utils::ror_query( $repo, $name );
 
     if( $response )
     {
-        if( $response->{message}->{'total-results'} == 0 )
+        if( $response->{number_of_results} == 0 )
         {
             my $item = {};
             push @$rows, $item;
@@ -101,21 +104,21 @@ sub lookup_name
         }
         else
         {
-            foreach my $funder ( @{$response->{message}->{items}} )
+            foreach my $funder ( @{$response->{items}} )
             {
                 my $item = {};
                 push @$rows, $item;
 
-               my $frag = $repo->make_doc_fragment;
+                my $frag = $repo->make_doc_fragment;
                 $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
                     name => $repo->make_text( $funder->{name} ),
-                    id => $repo->make_text( $funder->{uri} ) )
+                    id => $repo->make_text( $funder->{id} ) )
                 );
       
                 $item->{xhtml} = $frag;
                 $item->{values} = [
                     "for:value:relative:_name" => $funder->{name},
-                    "for:value:relative:_id" => $funder->{uri},
+                    "for:value:relative:_id" => $funder->{id},
                 ];
             }
         }
