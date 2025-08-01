@@ -7,7 +7,7 @@ sub ror_query
 	my( $repo, $name ) = @_;
 
     # build the request
-    my $url = "https://api.ror.org/organizations";
+    my $url = "https://api.ror.org/v1/organizations";
 
     # add the name to the query
     $name =~ tr/ /+/;
@@ -50,7 +50,7 @@ sub ror_id
 	my( $repo, $id ) = @_;
 
     # build the request
-    my $url = "https://api.ror.org/organizations/$id";
+    my $url = "https://api.ror.org/v1/organizations/$id";
 
     my $ua = LWP::UserAgent->new;
 
