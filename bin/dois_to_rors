@@ -121,7 +121,7 @@ sub ror_query
     my( $repo, $doi ) = @_;
 
     # build the request
-    my $url = "https://api.ror.org/organizations";
+    my $url = "https://api.ror.org/v1/organizations";
     $url .= "?query.advanced=external_ids.FundRef.all:$doi";
     
     my $ua = LWP::UserAgent->new;
