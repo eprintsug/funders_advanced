@@ -125,7 +125,7 @@ sub ror_query
     my( $repo, $name, $normalised_name ) = @_;
 
     # build the request
-    my $url = "https://api.ror.org/organizations";
+    my $url = "https://api.ror.org/v1/organizations";
     $url .= "?query.advanced=name:\"$normalised_name\"+OR+acronyms:\"$normalised_name\"";
     
     my $ua = LWP::UserAgent->new;
