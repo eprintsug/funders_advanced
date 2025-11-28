@@ -19,8 +19,6 @@ my $db = $repo->get_database;
 
 my $string_frag = lc $repo->param( "q" );
 
-print STDERR "frag.....$string_frag\n";
-
 # name from the workflow
 my $name = lc $repo->param( "_name" );
 
@@ -62,17 +60,7 @@ sub lookup_id
         push @$rows, $item;
  
         # get the name
-        my $funder_name = "Missing Funder Name";
-        foreach my $name ( @{$funder->{names}} )
-        {
-            if( $name->{lang} eq "en" && 
-                grep( /ror_display/, @{$name->{types}} ) &&
-                grep( /label/, @{$name->{types}} )
-            )
-            {
-                $funder_name = $name->{value};
-            }
-        }             
+        my $funder_name =  EPrints::FundersAdvanced::Utils::name_from_ror_result( $funder );
 
         my $frag = $repo->make_doc_fragment;
         $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
@@ -117,19 +105,9 @@ sub lookup_name
             {
                 my $item = {};
                 push @$rows, $item;
-
+                
                 # get the name
-                my $funder_name = "Missing Funder Name";
-                foreach my $name ( @{$funder->{names}} )
-                {
-                    if( $name->{lang} eq "en" && 
-                        grep( /ror_display/, @{$name->{types}} ) &&
-                        grep( /label/, @{$name->{types}} )
-                    )
-                    {
-                        $funder_name = $name->{value};
-                    }
-                }             
+                my $funder_name =  EPrints::FundersAdvanced::Utils::name_from_ror_result( $funder );
 
                 my $frag = $repo->make_doc_fragment;
                 $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',

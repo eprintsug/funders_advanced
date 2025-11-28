@@ -81,6 +81,28 @@ sub ror_id
     }    
 }
 
+sub name_from_ror_result
+{
+    my( $ror_funder ) = @_;
+    
+    my $funder_name = "Missing Funder Name";
+
+    foreach my $name ( @{$ror_funder->{names}} )
+    {
+        # TO DO: Use preferred language rather than "en"
+
+        if( defined $name->{lang} &&
+            $name->{lang} eq "en" &&
+            grep( /ror_display/, @{$name->{types}} ) &&
+            grep( /label/, @{$name->{types}} )
+        )
+        {
+            $funder_name = $name->{value};
+        }
+    }
+
+    return $funder_name;
+}
 
 sub crossref_query
 {
