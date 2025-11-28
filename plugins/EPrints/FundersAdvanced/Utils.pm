@@ -7,11 +7,12 @@ sub ror_query
 	my( $repo, $name ) = @_;
 
     # build the request
-    my $url = "https://api.ror.org/organizations";
+    my $url = "https://api.ror.org/v2/organizations";
 
     # add the name to the query
     $name =~ tr/ /+/;
-    $url .= "?query.advanced=name:$name+OR+acronyms:$name";
+    $url .= "?query=$name";
+
 
     my $ua = LWP::UserAgent->new;
 
