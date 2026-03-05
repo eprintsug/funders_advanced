@@ -233,15 +233,17 @@ sub lookup_ror_names
                 my $item = {};
                 push @$rows, $item;
 
+                # get the name  
+                my $funder_name =  EPrints::FundersAdvanced::Utils::name_from_ror_result( $funder );
+                
                 my $frag = $repo->make_doc_fragment;
                 $frag->appendChild( $repo->html_phrase( 'cgi/lookup/funders_advanced:funder',
-                    name => $repo->make_text( $funder->{name} ),
+                    name => $repo->make_text( $funder_name ),
                     id => $repo->make_text( $funder->{id} ) )
                 );
-
                 $item->{xhtml} = $frag;
                 $item->{values} = [
-                    "for:value:relative:_funder_name" => $funder->{name},
+                    "for:value:relative:_funder_name" => $funder_name,
                     "for:value:relative:_funder_id" => $funder->{id},
                 ];
             }
